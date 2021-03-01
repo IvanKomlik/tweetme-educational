@@ -1,5 +1,5 @@
 from json.encoder import JSONEncoder
-from django.http.response import JsonResponse
+from django.http.response import Http404, JsonResponse
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from tweets.models import Tweet
@@ -10,7 +10,12 @@ def home_view(request, *args, **kwargs):
 
 def tweet_detail_view(reqest, tweet_id, *args, **kwargs):
     
-    tweet_from_query = Tweet.objects.get(id=tweet_id)
+
+    try:
+        tweet_from_query = Tweet.objects.get(id=tweet_id)
+
+    except:
+        raise Http404
 
     data = {
         "id": tweet_from_query.id,
